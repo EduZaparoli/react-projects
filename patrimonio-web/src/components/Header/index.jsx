@@ -20,6 +20,8 @@ function Header() {
                         <Nav>
                             <Nav.Link as={Link} to="/dashboard">Dashboard</Nav.Link>
                             <Nav.Link as={Link} to="/departamento">Departamento</Nav.Link>
+                            <Nav.Link as={Link} to="/categoria">Categoria</Nav.Link>
+                            <Nav.Link as={Link} to="/patrimonio">Patrimonio</Nav.Link>
                             <Nav.Link as={Link} to="/formulario">Formulário</Nav.Link>
                             <Nav.Link as={Link} to="/hooks">Hooks</Nav.Link>
                             <Navbar.Text className="divisor" />

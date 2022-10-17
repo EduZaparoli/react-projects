@@ -10,6 +10,8 @@ import FormularioPage from './pages/FormularioPage';
 import LoginPage from './pages/LoginPage';
 import HooksPage from './pages/HooksPage';
 import DepartamentoPage from './pages/DepartamentoPage';
+import PatrimonioPage from './pages/PatrimonioPage';
+import CategoriaPage from './pages/CategoriaPage';
 
 const RoutesApp = () => {
     return (
@@ -20,6 +22,8 @@ const RoutesApp = () => {
                 <Route exact path='/formulario' element={<FormularioPage />} />
                 <Route exact path='/hooks' element={<HooksPage />} />
                 <Route exact path='/departamento' element={<DepartamentoPage />} />
+                <Route exact path='/categoria' element={<CategoriaPage />} />
+                <Route exact path='/patrimonio' element={<PatrimonioPage />} />
 
                 <Route path='*' element={<ErrorPage />} />
             </Routes>

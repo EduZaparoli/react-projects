@@ -1,11 +1,11 @@
 import React from "react";
 import { Button, Table, Modal } from "react-bootstrap";
 import Header from "../../components/Header";
-import { useDepartamento } from "../../context/DepartamentoContext";
+import { useCategoria } from "../../context/CategoriaContext";
 import { useEffect, useState } from "react";
 import axios from 'axios'
 
-function DepartamentoPage() {
+function CategoriaPage() {
 
     const [show, setShow] = useState(false);
     const [showUpdate, setShowUpdate] = useState(false);
@@ -19,11 +19,11 @@ function DepartamentoPage() {
     const [valorInput, setValorInput] = useState('')
 
     const {
-        departamentos,
-    } = useDepartamento();
+        categorias,
+    } = useCategoria();
 
-    function adicionarDep(){
-        axios.post('http://localhost:9092/departamento', {
+    function adicionarCat(){
+        axios.post('http://localhost:9092/categoria', {
             nome: valorInput
         })
         .then (() => {
@@ -35,17 +35,17 @@ function DepartamentoPage() {
             }
         })
         .catch(() => {
-            alert('Não foi possivel adicionar o departamento')
+            alert('Não foi possivel adicionar a categoria')
         })
     }
 
-    function deletarDep(id){
-        axios.delete(`http://localhost:9092/departamento/${id}`)
+    function deletarCat(id){
+        axios.delete(`http://localhost:9092/categoria/${id}`)
         window.location.reload();
     }
 
-    function atualizarDep(id){
-        axios.post('http://localhost:9092/departamento', {
+    function atualizarCat(id){
+        axios.post('http://localhost:9092/categoria', {
             id: id,
             nome: 'atualizado'
         })
@@ -53,7 +53,7 @@ function DepartamentoPage() {
             window.location.reload();
         })
         .catch(() => {
-            alert('Não foi possivel atualizar o departamento')
+            alert('Não foi possivel atualizar a categoria')
         })
     }
 
@@ -62,7 +62,7 @@ function DepartamentoPage() {
             <Header />
 
             <div className="container">
-                <h1>Cadastro de Departamento</h1>
+                <h1>Cadastro de Categorias</h1>
                 
                 <Button variant="secondary" onClick={handleShow}>Novo</Button>
 
@@ -70,25 +70,25 @@ function DepartamentoPage() {
 
                 <Modal show={show} onHide={handleClose}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Cadastro de Departamento</Modal.Title>
+                        <Modal.Title>Cadastro de Categorias</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <form>
-                            Nome do Departamento
+                            Nome da categoria
                             <br />
                             <input type="text" onChange={event => setValorInput(event.target.value)}/>
                         </form>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleClose}>Cancelar</Button>
-                        <Button variant="secondary" onClick={adicionarDep}>Salvar</Button>
+                        <Button variant="secondary" onClick={adicionarCat}>Salvar</Button>
                     </Modal.Footer>
 
                 </Modal>
 
                 <Modal show={showUpdate} onHide={handleCloseUpdate}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Atualizar Departamento</Modal.Title>
+                        <Modal.Title>Atualizar Categoria</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <form>
@@ -99,7 +99,7 @@ function DepartamentoPage() {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleCloseUpdate}>Cancelar</Button>
-                        <Button variant="secondary" onClick={atualizarDep}>Salvar</Button>
+                        <Button variant="secondary" onClick={atualizarCat}>Salvar</Button>
                     </Modal.Footer>
 
                 </Modal>
@@ -114,14 +114,14 @@ function DepartamentoPage() {
                     </thead>
                     <tbody>
                         {
-                            departamentos.map(
-                                departamento => {
-                                    return <tr key={departamento.id}>
-                                        <td>{departamento.id}</td>
-                                        <td>{departamento.nome}</td>
+                            categorias.map(
+                                categoria => {
+                                    return <tr key={categoria.id}>
+                                        <td>{categoria.id}</td>
+                                        <td>{categoria.nome}</td>
                                         <td>
-                                        <Button variant="outline-secondary" onClick={() => atualizarDep(departamento.id)}>Editar</Button> {' '}
-                                        <Button variant="outline-secondary" onClick={() => deletarDep(departamento.id)}>Excluir</Button>
+                                        <Button variant="outline-secondary" onClick={() => atualizarCat(categoria.id)}>Editar</Button> {' '}
+                                        <Button variant="outline-secondary" onClick={() => deletarCat(categoria.id)}>Excluir</Button>
                                         </td>
                                     </tr>
                                 }
@@ -129,15 +129,9 @@ function DepartamentoPage() {
                         }
                     </tbody>
                 </Table>
-
-                {/* <p>Valor atual contador: {contador}</p>
-
-                <button onClick={
-                    () => { setContador(contador + 1) }
-                }>Incrementar</button> */}
             </div>
         </React.Fragment>
     )
 }
 
-export default DepartamentoPage;
+export default CategoriaPage;
