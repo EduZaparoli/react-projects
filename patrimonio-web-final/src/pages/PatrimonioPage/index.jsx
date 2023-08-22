@@ -17,29 +17,31 @@ function PatrimonioPage() {
 
 
     const [valorInput, setValorInput] = useState('')
+    const [valorInputId, setValorInputId] = useState('')
     const [valorInputDesc, setValorInputDesc] = useState('')
     const [valorInputPreco, setValorInputPreco] = useState('')
-    const [valorInputImg, setValorInputImg] = useState('')
+    const [valorInputDep, setValorInputDep] = useState('')
+    const [valorInputCat, setValorInputCat] = useState('')
+    
 
     const {
         patrimonios,
     } = usePatrimonio();
-
+    
     function adicionarPat(){
         axios.post('http://localhost:9092/patrimonio', {
             status: true,
             nome: valorInput,
             descricao: valorInputDesc,
-            imagemUrl: valorInputImg,
             preco: valorInputPreco,
             departamento: {
-                id: "idDep",
-                nome: "nomeDep"
+                id: valorInputDep
             },
-            categoria: {
-                id: "idCat",
-                nome: "nomeCat"
-            }
+            categoria: [
+                {
+                    id: valorInputCat
+                },
+            ]
         })
         .then (() => {
             if(valorInput.length === 0){
@@ -49,32 +51,73 @@ function PatrimonioPage() {
                 alert('Insira uma descrição')
             }
             else if(valorInputPreco === 0){
-                alert('Insira um valor')
+                alert('Insira um preço')
+            }
+            else if(valorInputDep === 0){
+                alert('Insira um departamento')
+            }
+            else if(valorInputCat === 0){
+                alert('Insira uma categoria')
             }
             else{
                 window.location.reload();
             }
         })
-        .catch(() => {
+        .catch((error) => {
             alert('Não foi possivel adicionar o patrimonio')
+            console.log(error)
         })
     }
 
     function deletarPat(id){
         axios.delete(`http://localhost:9092/patrimonio/${id}`)
-        window.location.reload();
+        .then(() => {
+            window.location.reload();
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     }
 
     function atualizarPat(id){
         axios.post('http://localhost:9092/patrimonio', {
-            id: id,
-            nome: 'atualizado'
+            status: true,
+            id: valorInputId,
+            nome: valorInput,
+            descricao: valorInputDesc,
+            preco: valorInputPreco,
+            departamento: {
+                id: valorInputDep
+            },
+            categoria: [
+                {
+                    id: valorInputCat
+                },
+            ]
         })
         .then (() => {
-            window.location.reload();
+            if(valorInput.length === 0){
+                alert('Insira um nome')
+            }
+            else if(valorInputDesc.length === 0){
+                alert('Insira uma descrição')
+            }
+            else if(valorInputPreco === 0){
+                alert('Insira um preço')
+            }
+            else if(valorInputDep === 0){
+                alert('Insira um departamento')
+            }
+            else if(valorInputCat === 0){
+                alert('Insira uma categoria')
+            }
+            else{
+                window.location.reload();
+            }
         })
-        .catch(() => {
+        .catch((error) => {
             alert('Não foi possivel atualizar o patrimonio')
+            console.log(error)
         })
     }
 
@@ -103,21 +146,20 @@ function PatrimonioPage() {
                             <br />
                             <input type="text" onChange={event => setValorInputDesc(event.target.value)}/>
                             <br />
-                            Imagem URL
-                            <br />
-                            <input type="text" onChange={event => setValorInputImg(event.target.value)}/>
-                            <br />
                             Preço
                             <br />
                             <input type="number" onChange={event => setValorInputPreco(event.target.value)}/>
                             <br />
-                            {/* Departamento
+                            Código Departamento
                             <br />
-                            <input type="number" onChange={event => setValorInputPreco(event.target.value)}/>
+                            <input type="number" onChange={event => setValorInputDep(event.target.value)}/>
+                            <br /> <br />
+                            <p>Informe as Categorias</p>
+                            Código Categoria
                             <br />
-                            Categorias
-                            <br />
-                            <input type="number" onChange={event => setValorInputPreco(event.target.value)}/> */}
+                            <input type="number" onChange={event => setValorInputCat(event.target.value)}/>
+                            <Button variant="secondary">+</Button>
+                            <Button variant="secondary">-</Button>
                         </form>
                     </Modal.Body>
                     <Modal.Footer>
@@ -133,9 +175,33 @@ function PatrimonioPage() {
                     </Modal.Header>
                     <Modal.Body>
                         <form>
-                            Novo Nome
+                            Código do Patrimonio
                             <br />
-                            <input id="nome" type="text" onChange={event => setValorInput(event.target.value)}/>
+                            <input type="text" onChange={event => setValorInputId(event.target.value)}/>
+                            <br />
+                            Nome do Patrimonio
+                            <br />
+                            <input type="text" onChange={event => setValorInput(event.target.value)}/>
+                            <br />
+                            Descrição
+                            <br />
+                            <input type="text" onChange={event => setValorInputDesc(event.target.value)}/>
+                            <br />
+                            Preço
+                            <br />
+                            <input type="number" onChange={event => setValorInputPreco(event.target.value)}/>
+                            <br />
+                            Código Departamento
+                            <br />
+                            <input type="number" onChange={event => setValorInputDep(event.target.value)}/>
+                            <br /> <br />
+                            <p>Informe as Categorias</p>
+                            Código Categoria
+                            <br />
+                            <input type="number" onChange={event => setValorInputCat(event.target.value)}/>
+                            <Button variant="secondary">+</Button>
+                            <Button variant="secondary">-</Button>
+                            <br />
                         </form>
                     </Modal.Body>
                     <Modal.Footer>
@@ -152,6 +218,8 @@ function PatrimonioPage() {
                             <th>Nome</th>
                             <th>Descrição</th>
                             <th>Preço</th>
+                            <th>Departamento</th>
+                            <th>Categoria</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -164,8 +232,10 @@ function PatrimonioPage() {
                                         <td>{patrimonio.nome}</td>
                                         <td>{patrimonio.descricao}</td>
                                         <td>{patrimonio.preco}</td>
+                                        <td>{patrimonio.departamento.nome}</td>
+                                        <td>{patrimonio.categoria}</td>
                                         <td>
-                                        <Button variant="outline-secondary" onClick={() => atualizarPat(patrimonio.id)}>Editar</Button> {' '}
+                                        <Button variant="outline-secondary" onClick={handleShowUpdate}>Editar</Button> {' '}
                                         <Button variant="outline-secondary" onClick={() => deletarPat(patrimonio.id)}>Excluir</Button>
                                         </td>
                                     </tr>

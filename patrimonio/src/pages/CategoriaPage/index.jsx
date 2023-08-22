@@ -17,6 +17,7 @@ function CategoriaPage() {
 
 
     const [valorInput, setValorInput] = useState('')
+    const [valorInputId, setValorInputId] = useState('')
 
     const {
         categorias,
@@ -34,26 +35,33 @@ function CategoriaPage() {
                 window.location.reload();
             }
         })
-        .catch(() => {
+        .catch((error) => {
             alert('Não foi possivel adicionar a categoria')
+            console.log(error)
         })
     }
 
     function deletarCat(id){
         axios.delete(`http://localhost:9092/categoria/${id}`)
-        window.location.reload();
+        .then(() => {
+            window.location.reload();
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     }
 
     function atualizarCat(id){
         axios.post('http://localhost:9092/categoria', {
-            id: id,
-            nome: 'atualizado'
+            id: valorInputId,
+            nome: valorInput
         })
         .then (() => {
             window.location.reload();
         })
-        .catch(() => {
+        .catch((error) => {
             alert('Não foi possivel atualizar a categoria')
+            console.log(error)
         })
     }
 
@@ -92,6 +100,10 @@ function CategoriaPage() {
                     </Modal.Header>
                     <Modal.Body>
                         <form>
+                            Código da Categoria
+                            <br />
+                            <input id="nome" type="text" onChange={event => setValorInputId(event.target.value)}/>
+                            <br />
                             Novo Nome
                             <br />
                             <input id="nome" type="text" onChange={event => setValorInput(event.target.value)}/>
@@ -120,7 +132,7 @@ function CategoriaPage() {
                                         <td>{categoria.id}</td>
                                         <td>{categoria.nome}</td>
                                         <td>
-                                        <Button variant="outline-secondary" onClick={() => atualizarCat(categoria.id)}>Editar</Button> {' '}
+                                        <Button variant="outline-secondary" onClick={handleShowUpdate}>Editar</Button> {' '}
                                         <Button variant="outline-secondary" onClick={() => deletarCat(categoria.id)}>Excluir</Button>
                                         </td>
                                     </tr>
